@@ -119,12 +119,10 @@ a,a:hover{
 	font-size: 22px;
 }
 
-#select_area_master{
-	font-weight: bold;
-	font-size: 25px;
-}
 
-#select_area{
+
+select.form-control{
 	font-weight: bold;
-	font-size: 25px;
+	font-size: 20px;
+    margin: 5px 5px 5px 5px;
 }
