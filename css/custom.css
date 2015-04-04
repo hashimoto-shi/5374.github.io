@@ -118,3 +118,21 @@ a,a:hover{
 	text-align: center;
 	font-size: 22px;
 }
+
+#select_area_master{
+	padding: 0;
+	width: 100%;
+	height: 5px;
+	font-weight: bold;
+	font-size: 20px;
+	margin-top: 5px;
+}
+
+#select_area{
+	padding: 0;
+	width: 100%;
+	height: 5px;
+	font-weight: bold;
+	font-size: 20px;
+	margin-top: 5px;
+}
