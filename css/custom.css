@@ -120,19 +120,11 @@ a,a:hover{
 }
 
 #select_area_master{
-	padding: 0;
-	width: 100%;
-	height: 5px;
 	font-weight: bold;
-	font-size: 20px;
-	margin-top: 5px;
+	font-size: 25px;
 }
 
 #select_area{
-	padding: 0;
-	width: 100%;
-	height: 5px;
 	font-weight: bold;
-	font-size: 20px;
-	margin-top: 5px;
+	font-size: 25px;
 }
