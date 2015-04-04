@@ -1,5 +1,10 @@
 label,sublabel,description,styles,bgcolor
-容器包装 プラスチック,,,img/moyasanai02.svg,#733b96
-資源ごみ,,,img/shigen02.svg,#77ae1f
-普通ごみ,,,img/moyasu02.svg,#ea3b13
-古紙 衣類,,,img/bin02.svg,#2dc7aa
+可燃ごみ,,,img/kanen02.svg,#733b96
+プラ製容器包装,,,img/pura02.svg,#77ae1f
+ペットボトル,,,img/petbottle02.svg,#ea3b13
+埋立ごみ,,,img/umetate02.svg,#2dc7aa
+食品用ビン・スチール缶,,,img/shokuhinbin02.svg,#bbe400
+破砕選別ごみ,,,img/hasasenbetu02.svg,#685ecf
+粗大ごみ,,,img/sodai02.svg,#ba5ed5
+布類・段ボール・新聞・古紙,,,img/nunodanbouru02.svg,#81d12e
+アルミ缶,,,img/arumikan02.svg,#27a047
