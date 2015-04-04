@@ -1,5 +1,5 @@
 <about """About 5374.jp""">
-<title """5374.jp Kawasaki-shi""">
+<title """5374.jp hashimoto-shi""">
 
 <help """
 The problem of the garbage is serious in all areas.
@@ -50,15 +50,14 @@ Code for Kanazawa (金沢)は市民のための組織です。行政や民間企
 <a href="http://www.codeforkanazawa.org/" class="normal">http://www.codeforkanazawa.org/</a>
 """>
 
-<cfx_kawasaki """オープン川崎/Code for Kawasaki(川崎)について""">
+<cfx_kawasaki """橋本市について""">
 <cfx_kawasaki_article """
-Code for Kawasaki(川崎)は、<a href="http://code4japan.org/" class="normal">Code for Japan </a>のコンセプトに賛同する、<br>
-川崎市の地域社会の向上をITで行うことを目指すコミュニティです<br>
-※ Code for Kawasaki(川崎)は「オープン川崎」が運営母体の分科会です
+Code for は、<a href="http://code4japan.org/" class="normal">Code for Japan </a>のコンセプトに賛同する、<br>
+地域社会の向上をITで行うことを目指すコミュニティです<br>
 """>
-<cfx_kawasaki_page """
+<cfx__page """
 Facebookページ<br>
-<a href="https://www.facebook.com/codeforkawasaki" class="normal">https://www.facebook.com/codeforkawasaki</a>
+<a href="https://www.facebook.com/" class="normal">https://www.facebook.com/</a>
 """>
 
 

@@ -1,5 +1,5 @@
 <about """5374.jpについて""">
-<title """5374(ｺﾞﾐﾅｼ).jp 神奈川県川崎市版""">
+<title """5374(ｺﾞﾐﾅｼ).jp 橋本市版""">
 
 <help """
 ゴミの問題は、どの地域でも深刻になりつつあります。
@@ -43,12 +43,11 @@ Code for Kanazawa (金沢)は市民のための組織です。行政や民間企
 <cfx_kawasaki """オープン川崎/Code for Kawasaki(川崎)について""">
 <cfx_kawasaki_article """
 Code for Kawasaki(川崎)は、<a href="http://code4japan.org/" class="normal">Code for Japan </a>のコンセプトに賛同する、<br>
-川崎市の地域社会の向上をITで行うことを目指すコミュニティです<br>
-※ Code for Kawasaki(川崎)は「オープン川崎」が運営母体の分科会です
+地域社会の向上をITで行うことを目指すコミュニティです<br>
 """>
 <cfx_kawasaki_page """
 Facebookページ<br>
-<a href="https://www.facebook.com/codeforkawasaki" class="normal">https://www.facebook.com/codeforkawasaki</a>
+<a href="https://www.facebook.com/" class="normal">https://www.facebook.com/</a>
 """>
 
 

@@ -14,17 +14,12 @@
 使い方については、[HOWTOUSE.md](HOWTOUSE.md)に参照ください
 
 ## 開発チームとライセンスについて
-- 小野 祐貴(Yuki ONO)　Developer
-- 五十川 員申(Kazunobu IKAGAWA)　Developer
-- 高木 志宗(Yukimune TAKAGI)　Developer
-- 宮田 人司(Hotoshi MIYATA)　Designer
 
-本アプリ及びソースコードの著作権はCode for Kanazawaに帰属します。
+本アプリ及びソースコードの著作権はCode for に帰属します。
 但し、このソースコードは[MPL](http://www.mozilla.org/MPL/2.0/)のもと配布されています。MPLに従えば、どなたでも利用、改変、及び再配布が可能です。
 
-## Contributers in Code for Kawasaki
+## Contributers in Code for
 
-川崎市全域版5374.jpは、Code for Kanazawaの5374.jpをベースに2014/07/19のイベントで川崎市向けに作成されたものです
+橋本市版5374.jpは、Code for の5374.jpをベースに2015/04/01の橋本市向けに作成されたものです
 
-* [川崎市全域版 5374.jp(ごみなし.jp) 作成ワークショップ](http://connpass.com/event/7215/)
-* [Code for Kawasaki Facebookページ](https://www.facebook.com/codeforkawasaki)
+* [橋本市版 5374.jp(ごみなし.jp) 作成ワークショップ]
