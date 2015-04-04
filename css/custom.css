@@ -120,8 +120,7 @@ a,a:hover{
 }
 
 
-
-select.form-control{
+.form-control{
 	font-weight: bold;
-	font-size: 18px;
+	font-size: 16px;
 }
