@@ -121,7 +121,7 @@ a,a:hover{
 
 
 .form-control{
-	font-weight: bold;
 	font-size: 18px;
+    color : blue;
     height : auto;
 }
