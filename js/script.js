@@ -3,7 +3,7 @@
 /**
   エリア(ごみ処理の地域）を管理するクラスです。
 */
-var AreaModel = function () {
+var AreaModel = function() {
   this.mastercode;
   this.label;
   this.centerName;
@@ -21,9 +21,6 @@ var AreaModel = function () {
     休止期間（主に年末年始）かどうかを判定します。
   */
   this.isBlankDay = function(currentDate) {
-    if (!this.center) {
-        return false;
-    }
     var period = [this.center.startDate, this.center.endDate];
 
     if (period[0].getTime() <= currentDate.getTime() &&
@@ -48,8 +45,6 @@ var AreaModel = function () {
 */
   this.sortTrash = function() {
     this.trash.sort(function(a, b) {
-      if (a.mostRecent === undefined) return 1;
-      if (b.mostRecent === undefined) return -1;
       var at = a.mostRecent.getTime();
       var bt = b.mostRecent.getTime();
       if (at < bt) return -1;
@@ -68,14 +63,10 @@ var TrashModel = function(_lable, _cell, remarks) {
   this.mostRecent;
   this.dayList;
   this.mflag = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-  var monthSplitFlag=_cell.search(/:/)>=0
-  if (monthSplitFlag) {
+  if (_cell.search(/:/) >= 0) {
     var flag = _cell.split(":");
     this.dayCell = flag[0].split(" ");
     var mm = flag[1].split(" ");
-  } else if (_cell.length == 2 && _cell.substr(0,1) == "*") {
-    this.dayCell = _cell.split(" ");
-    var mm = new Array();
   } else {
     this.dayCell = _cell.split(" ");
     var mm = new Array("4", "5", "6", "7", "8", "9", "10", "11", "12", "1", "2", "3");
@@ -102,27 +93,9 @@ var TrashModel = function(_lable, _cell, remarks) {
       this.regularFlg = 0;  // 定期回収フラグオフ
     }
   }
-  if (monthSplitFlag){
-    var monthList="";
-    for (var m in this.mflag) {
-      if (this.mflag[m]){
-        if (monthList.length>0){
-          monthList+=","
-        }
-        //mを整数化
-        monthList+=((m-0)+1)
-      }
-    };
-    monthList+="月 "
-    result_text=monthList+result_text
-  }
   this.dayLabel = result_text;
 
-
   this.getDateLabel = function() {
-    if (this.mostRecent === undefined) {
-	return this.getRemark() + "不明";
-    }
     var result_text = this.mostRecent.getFullYear() + "/" + (1 + this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate();
     return this.getRemark() + this.dayLabel + " " + result_text;
   }
@@ -211,7 +184,7 @@ var TrashModel = function(_lable, _cell, remarks) {
             }
             //特定の週のみ処理する
             if (day_mix[j].length > 1) {
-              if ((week != day_mix[j].charAt(1) - 1) || ("*" == day_mix[j].charAt(0))) {
+              if (week != day_mix[j].charAt(1) - 1) {
                 continue;
               }
             }
@@ -241,6 +214,7 @@ var TrashModel = function(_lable, _cell, remarks) {
     })
     //直近の日付を更新
     var now = new Date();
+
     for (var i in day_list) {
       if (this.mostRecent == null && now.getTime() < day_list[i].getTime() + 24 * 60 * 60 * 1000) {
         this.mostRecent = day_list[i];
@@ -295,7 +269,7 @@ var DescriptionModel = function(data) {
  * target.csvのモデルです。
  */
 var TargetRowModel = function(data) {
-  this.label = data[0];
+  this.type = data[0];
   this.name = data[1];
   this.notice = data[2];
   this.furigana = data[3];
@@ -305,19 +279,20 @@ var TargetRowModel = function(data) {
  * ゴミ収集日に関する備考を管理するクラスです。
  * remarks.csvのモデルです。
  */
-var RemarkModel = function(data) {
-  this.id = data[0];
-  this.text = data[1];
+var RemarkModel = function() {
+  this.id;
+  this.text;
 }
 
 /**
   エリアマスターを管理するクラスです。
   area_master.csvのモデルです。
 */
-var AreaMasterModel = function () {
-    this.mastercode;
-    this.name;
+var AreaMasterModel = function() {
+  this.mastercode;
+  this.name;
 }
+
 
 /* var windowHeight; */
 
@@ -328,103 +303,149 @@ $(function() {
   var descriptions = new Array();
   var areaModels = new Array();
   var remarks = new Array();
+  var areaMasterModels  = new Array();
 /*   var descriptions = new Array(); */
 
 
+  // ローカルストレージ（エリア名）
   function getSelectedAreaName() {
     return localStorage.getItem("selected_area_name");
   }
 
   function setSelectedAreaName(name) {
-      try {
-          localStorage.setItem("selected_area_name", name);
-      } catch (domException) {
-      }
+    localStorage.setItem("selected_area_name", name);
   }
 
-    // ローカルストレージ（エリアマスター名）
+  // ローカルストレージ（エリアマスター名）
   function getSelectedAreaMasterName() {
-      return localStorage.getItem("selected_area_master_name");
+    return localStorage.getItem("selected_area_master_name");
   }
 
   function setSelectedAreaMasterName(name) {
-      try {
-          localStorage.setItem("selected_area_master_name", name);
-      } catch (domException) {
-      }
+    localStorage.setItem("selected_area_master_name", name);
   }
 
-    // ローカルストレージ（エリアマスター名）
+  // ローカルストレージ（エリアマスター名）
   function getSelectedAreaMasterNameBefore() {
-      return localStorage.getItem("selected_area_master_name_before");
+    return localStorage.getItem("selected_area_master_name_before");
   }
 
   function setSelectedAreaMasterNameBefore(name) {
-      try {
-          localStorage.setItem("selected_area_master_name_before", name);
-      } catch (domException) {
-      }
+    localStorage.setItem("selected_area_master_name_before", name);
   }
 
   function csvToArray(filename, cb) {
-      $.get(filename, function (csvdata) {
-          //CSVのパース作業
-          //CRの解析ミスがあった箇所を修正しました。
-          //以前のコードだとCRが残ったままになります。
-          // var csvdata = csvdata.replace("\r/gm", ""),
-          csvdata = csvdata.replace(/\r/gm, "");
-          var line = csvdata.split("\n"),
-              ret = [];
-          var opt = {
-              quotes: false,
-              delimiter: ",",
-              newline: "\r\n"
-          };
-          for (var i in line) {
-              //空行はスルーする。
-              if (line[i].length === 0) continue;
+    $.get(filename, function(csvdata) {
+      //CSVのパース作業
+      //CRの解析ミスがあった箇所を修正しました。
+      //以前のコードだとCRが残ったままになります。
+      // var csvdata = csvdata.replace("\r/gm", ""),
+       csvdata = csvdata.replace(/\r/gm, "");
+      var line = csvdata.split("\n"),
+          ret = [];
+      for (var i in line) {
+        //空行はスルーする。
+        if (line[i].length == 0) continue;
 
-              var csv = new CSV(line[i], opt).parse();
-              //var row = line[i].split(",");
-              ret.push(csv[0]);
-          }
-          cb(ret);
-      });
+        var row = line[i].split(",");
+        ret.push(row);
+      }
+      cb(ret);
+    });
   }
 
 
   function masterAreaList() {
-      ctx.localize(['selectward', 'selectarea'], function (l10n) {
-          var langs = l10n.reason.locales;
-          var lang = l10n.entities.selectarea.locale;
+    // ★エリアのマスターリストを読み込みます
+    // 大阪府仕様。大阪府下の区一覧です
+    csvToArray("data/area_master.csv", function(tmp) {
+      var area_master_label = tmp.shift();    // ラベル
+      for (var i in tmp) {
+        var row           = tmp[i];
+        var area_master   = new AreaMasterModel();
+        area_master.mastercode    = row[0];
+        area_master.name  = row[1];
+        areaMasterModels.push(area_master);
+      }
 
-          // ★エリアのマスターリストを読み込みます
-          // 大阪府仕様。大阪府下の区一覧です
-          csvToArray("data/" + lang + "/area_master.csv", function (tmp) {
-              tmp.shift();    // ラベル
-              for (var i in tmp) {
-                  var row = tmp[i];
-                  var area_master = new AreaMasterModel();
-                  area_master.mastercode = row[0];
-                  area_master.name = row[1];
-                  areaMasterModels.push(area_master);
-              }
+      // ListメニューのHTMLを作成
+      var selected_master_name = getSelectedAreaMasterName();
+      var area_master_select_form = $("#select_area_master");
+      var select_master_html = "";
+      select_master_html += '<option value="-1">地域を選択してください</option>';
+      for (var row_index in areaMasterModels) {
+        var area_master_name = areaMasterModels[row_index].name;
+        var selected = (selected_master_name == area_master_name) ? 'selected="selected"' : "";
 
-              // ListメニューのHTMLを作成
-              var selected_master_name = getSelectedAreaMasterName();
-              var area_master_select_form = $("#select_area_master");
-              var select_master_html = "";
+        select_master_html += '<option value="' + row_index + '" ' + selected + " >" + area_master_name + "</option>";
+      }
 
-              select_master_html += '<option value="-1">' + l10n.entities.selectward.value + '</option>';
-              for (var row_index in areaMasterModels) {
-                  var area_master_name = areaMasterModels[row_index].name;
-                  var selected = (selected_master_name == area_master_name) ? 'selected="selected"' : "";
-
-                  select_master_html += '<option value="' + row_index + '" ' + selected + " >" + area_master_name + "</option>";
-              }
+      //デバッグ用
+      if (typeof dump == "function") {
+        dump(areaMasterModels);
+      }
+      //HTMLへの適応
+      area_master_select_form.html(select_master_html);
+      area_master_select_form.change();
+    });
+  }
 
 
-              //デバッグ用
+  function updateAreaList(mastercode) {
+    // 大阪府仕様。区のコード(mastercode)が引数です
+    csvToArray("data/area_days.csv", function(tmp) {
+      var area_days_label = tmp.shift();
+      for (var i in tmp) {
+        var row = tmp[i];
+        var area = new AreaModel();
+        area.mastercode = row[0];
+        area.label = row[1];
+        area.centerName = row[2];
+
+        // 区コードが一致した場合のみデータ格納
+        if(area.mastercode == mastercode){
+          areaModels.push(area);
+          //２列目以降の処理
+          for (var r = 3; r < 3 + MaxDescription; r++) {
+            if (area_days_label[r]) {
+              var trash = new TrashModel(area_days_label[r], row[r], remarks);
+              area.trash.push(trash);
+            }
+          }
+        }
+      }
+
+      csvToArray("data/center.csv", function(tmp) {
+        //ゴミ処理センターのデータを解析します。
+        //表示上は現れませんが、
+        //金沢などの各処理センターの休止期間分は一週間ずらすという法則性のため
+        //例えば第一金曜日のときは、一周ずらしその月だけ第二金曜日にする
+        tmp.shift();
+        for (var i in tmp) {
+          var row = tmp[i];
+
+          var center = new CenterModel(row);
+          center_data.push(center);
+        }
+        //ゴミ処理センターを対応する各地域に割り当てます。
+        for (var i in areaModels) {
+          var area = areaModels[i];
+          area.setCenter(center_data);
+        };
+        //エリアとゴミ処理センターを対応後に、表示のリストを生成する。
+        //ListメニューのHTML作成
+        var selected_name = getSelectedAreaName();
+        var area_select_form = $("#select_area");
+        var select_html = "";
+        select_html += '<option value="-1">地域を選択してください</option>';
+        for (var row_index in areaModels) {
+          var area_name = areaModels[row_index].label;
+          var selected = (selected_name == area_name) ? 'selected="selected"' : "";
+
+          select_html += '<option value="' + row_index + '" ' + selected + " >" + area_name + "</option>";
+        }
+
+        //デバッグ用
         if (typeof dump == "function") {
           dump(areaModels);
         }
@@ -435,112 +456,42 @@ $(function() {
     });
   }
 
-  function updateAreaList(mastercode) {
-      ctx.localize(['selectarea'], function(l10n) {
-          var langs = l10n.reason.locales;
-          var lang = l10n.entities.selectarea.locale;
-          // 大阪府仕様。区のコード(mastercode)が引数です
-          csvToArray("data/" + lang + "/area_days.csv", function(tmp) {
-              var area_days_label = tmp.shift();
-              for (var i in tmp) {
-                  var row = tmp[i];
-                  var area = new AreaModel();
-                  area.mastercode = row[0];
-                  area.label = row[1];
-                  area.centerName = row[2];
 
-                  // 区コードが一致した場合のみデータ格納
-                  if(area.mastercode == mastercode){
-                      areaModels.push(area);
-                      var params = [
-                        'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat',
-                        'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday',
-                        'every', 'first', 'second', 'third', 'fourth', 'fifth'
-                      ];
-                      ctx.localize(params, function(l10n) {
-                          //２列目以降の処理
-                          for (var r = 3; r < 3 + MaxDescription; r++) {
-                              if (area_days_label[r]) {
-                                  var trash = new TrashModel(area_days_label[r], row[r], remarks, l10n);
-                                  area.trash.push(trash);
-                              }
-                          }
-                      });
-                  }
-              }
+  function createMenuList(after_action) {
+    // 備考データを読み込む
+    csvToArray("data/remarks.csv", function(data) {
+      data.shift();
+      for (var i in data) {
+        remarks.push(new RemarkModel(data[i]));
+      }
+    });
+    csvToArray("data/description.csv", function(data) {
+      data.shift();
+      for (var i in data) {
+        descriptions.push(new DescriptionModel(data[i]));
+      }
 
-            csvToArray("data/" + lang + "/center.csv", function(tmp) {
-                //ゴミ処理センターのデータを解析します。
-                //表示上は現れませんが、
-                //金沢などの各処理センターの休止期間分は一週間ずらすという法則性のため
-                //例えば第一金曜日のときは、一周ずらしその月だけ第二金曜日にする
-                tmp.shift();
-                for (var i in tmp) {
-                    var row = tmp[i];
+      csvToArray("data/target.csv", function(data) {
 
-                    var center = new CenterModel(row);
-                    center_data.push(center);
-                }
-                //ゴミ処理センターを対応する各地域に割り当てます。
-                for (var i in areaModels) {
-                    var area = areaModels[i];
-                    area.setCenter(center_data);
-                }
-                //エリアとゴミ処理センターを対応後に、表示のリストを生成する。
-                //ListメニューのHTML作成
-                var selected_name = getSelectedAreaName();
-                var area_select_form = $("#select_area");
-                var select_html = "";
-                select_html += '<option value="-1">' + l10n.entities.selectarea.value + '</option>';
-                for (var row_index in areaModels) {
-                    var area_name = areaModels[row_index].label;
-                    var selected = (selected_name == area_name) ? 'selected="selected"' : "";
+        data.shift();
+        for (var i in data) {
+          var row = new TargetRowModel(data[i]);
+          for (var j = 0; j < descriptions.length; j++) {
+            //一致してるものに追加する。
+            if (descriptions[j].label == row.type) {
+              descriptions[j].targets.push(row);
+              break;
+            }
+          };
+        }
+        after_action();
+        $("#accordion2").show();
 
-                    select_html += '<option value="' + row_index + '" ' + selected + " >" + area_name + "</option>";
-                }
+      });
 
+    });
 
-
-    function createMenuList(after_action) {
-        ctx.localize(['about'], function(l10n) {
-            var langs = l10n.reason.locales;
-            var lang = l10n.entities.about.locale;
-
-            // 備考データを読み込む
-            csvToArray("data/" + lang + "/remarks.csv", function(data) {
-                data.shift();
-                for (var i in data) {
-                    remarks.push(new RemarkModel(data[i]));
-                }
-            });
-            csvToArray("data/" + lang + "/description.csv", function(data) {
-                data.shift();
-                for (var i in data) {
-                    descriptions.push(new DescriptionModel(data[i]));
-                }
-
-                csvToArray("data/" + lang + "/target.csv", function(data) {
-
-                    data.shift();
-                    for (var i in data) {
-                        var row = new TargetRowModel(data[i]);
-                        for (var j = 0; j < descriptions.length; j++) {
-                            //一致してるものに追加する。
-                            if (descriptions[j].label == row.type) {
-                                descriptions[j].targets.push(row);
-                                break;
-                            }
-                        }
-                    }
-                    after_action();
-                    $("#accordion2").show();
-
-                });
-
-            });
-        });
-
-    }
+  }
 
   function updateData(row_index) {
     //SVG が使えるかどうかの判定を行う。
@@ -554,10 +505,10 @@ $(function() {
     areaModel.calcMostRect();
     //トラッシュの近い順にソートします。
     areaModel.sortTrash();
-    var accordion_height = $(window).height() / descriptions.length;
+    var accordion_height = window.innerHeight / descriptions.length;
     if(descriptions.length>4){
-      accordion_height = accordion_height / 4.1;
-      if (accordion_height>140) {accordion_height = accordion_height / descriptions.length;};
+      accordion_height = window.innerHeight / 4.1;
+      if (accordion_height>140) {accordion_height = window.innerHeight / descriptions.length;};
       if (accordion_height<130) {accordion_height=130;};
     }
     var styleHTML = "";
@@ -571,7 +522,6 @@ $(function() {
        if (description.label != trash.label) {
           continue;
         }
-
           var target_tag = "";
           var furigana = "";
           var target_tag = "";
@@ -597,22 +547,18 @@ $(function() {
 
           var dateLabel = trash.getDateLabel();
           //あと何日かを計算する処理です。
-          var leftDayText = "";
-	  if (trash.mostRecent === undefined) {
-	    leftDayText == "不明";
-	  } else {
-            var leftDay = Math.ceil((trash.mostRecent.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+          var leftDay = Math.ceil((trash.mostRecent.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 
-            if (leftDay == 0) {
-              leftDayText = "今日";
-            } else if (leftDay == 1) {
-              leftDayText = "明日";
-            } else if (leftDay == 2) {
-              leftDayText = "明後日"
-            } else {
-              leftDayText = leftDay + "日後";
-            }
-	  }
+          var leftDayText = "";
+          if (leftDay == 0) {
+            leftDayText = "今日";
+          } else if (leftDay == 1) {
+            leftDayText = "明日";
+          } else if (leftDay == 2) {
+            leftDayText = "明後日"
+          } else {
+            leftDayText = leftDay + "日後";
+          }
 
           styleHTML += '#accordion-group' + d_no + '{background-color:  ' + description.background + ';} ';
 
@@ -639,7 +585,6 @@ $(function() {
             "</div>";
       }
     }
-
     $("#accordion-style").html('<!-- ' + styleHTML + ' -->');
 
     var accordion_elm = $("#accordion");
@@ -672,7 +617,6 @@ $(function() {
     setSelectedAreaName(areaModels[row_index].label);
 
     if ($("#accordion").children().length === 0 && descriptions.length === 0) {
-
       createMenuList(function() {
         updateData(row_index);
       });
@@ -681,36 +625,34 @@ $(function() {
     }
   }
 
-                // ★マスターの変更時
-  function onChangeSelectMaster(row_index) {
-      ctx.localize(['selectarea'], function(l10n) {
-          if (row_index == -1) {
-              // 初期化
-              $("#accordion").html("");
-              $("#select_area").html('<option value="-1">' + l10n.entities.selectarea.value + '</option>');
-              setSelectedAreaMasterName("");
-              return;
-          }
+  // ★マスターの変更時
+  function onChangeSelectMaster(row_index) {　
+    if (row_index == -1) {
+      // 初期化
+      $("#accordion").html("");
+      $("#select_area").html('<option value="-1">地域を選択してください</option>');
+      setSelectedAreaMasterName("");
+      return;
+    }
 
-          var checkAreaMasterName = getSelectedAreaMasterName();
-          var checkAreaMasterNameBefore = getSelectedAreaMasterNameBefore();
+    var checkAreaMasterName = getSelectedAreaMasterName();
+    var checkAreaMasterNameBefore = getSelectedAreaMasterNameBefore();
 
-          if(checkAreaMasterName == checkAreaMasterNameBefore){
-          }else{
-              $("#accordion").html("");
-              $("#select_area").html('<option value="-1">' + l10n.entities.selectarea.value + '</option>');
-              setSelectedAreaName("");
-          }
+    if(checkAreaMasterName == checkAreaMasterNameBefore){
+    }else{
+      $("#accordion").html("");
+      $("#select_area").html('<option value="-1">地域を選択してください</option>');
+      setSelectedAreaName("");
+    }
 
-          areaModels.length = 0;
+    areaModels.length = 0;
 
-          setSelectedAreaMasterName(areaMasterModels[row_index].name);
-          setSelectedAreaMasterNameBefore(areaMasterModels[row_index].name);
+    setSelectedAreaMasterName(areaMasterModels[row_index].name);
+    setSelectedAreaMasterNameBefore(areaMasterModels[row_index].name);
 
-          updateAreaList(areaMasterModels[row_index].mastercode);
-      });
+    updateAreaList(areaMasterModels[row_index].mastercode);
+
   }
-
 
 
   function getAreaIndex(area_name) {
@@ -722,16 +664,13 @@ $(function() {
     return -1;
   }
 
-
-                // リストマスターが選択されたら
+  // リストマスターが選択されたら
   $("#select_area_master").change(function(data) {
-      var row_index = $(data.target).val();
-      //onChangeSelect(row_index);
-      // ★ここでselect area変更用の読み込み処理
-      onChangeSelectMaster(row_index);
+    var row_index = $(data.target).val();
+    //onChangeSelect(row_index);
+    // ★ここでselect area変更用の読み込み処理
+    onChangeSelectMaster(row_index);
   });
-
-
 
   //リストが選択されたら
   $("#select_area").change(function(data) {
@@ -785,5 +724,8 @@ $(function() {
         return "An unknown error occurred."
     }
   }
-  updateAreaList();
+
+  masterAreaList();
+  //updateAreaList();
+
 });
