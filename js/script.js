@@ -630,7 +630,7 @@ $(function() {
     if (row_index == -1) {
       // 初期化
       $("#accordion").html("");
-      $("#select_area").html('<option value="-1">地区を選択してください</option>');
+      $("#select_area").html('<option value="-1">地域を選択してください</option>');
       setSelectedAreaMasterName("");
       return;
     }
